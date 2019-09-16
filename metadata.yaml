@@ -1,0 +1,4 @@
+homepage: "www.simoahava.com"
+versions:
+  - sha: bb4ff0c2954b2adc444322f037bb550327bb15bf
+    changeNotes: Initial release.
