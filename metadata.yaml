@@ -1,8 +1,10 @@
 homepage: "https://www.simoahava.com/"
 versions:
   # Latest version
+  - sha: ac65e69fb5ee3dea2971e3a399b2ebe2564f2e64
+    changeNotes: Add unit tests.
+  # Older version
   - sha: 441d6fcd53f3d73f887c407e1e501102cf161d84
     changeNotes: Update template metadata.
-  # Older versions
   - sha: bb4ff0c2954b2adc444322f037bb550327bb15bf
     changeNotes: Initial release.
