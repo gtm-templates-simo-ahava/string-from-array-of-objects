@@ -1,4 +1,4 @@
-___TERMS_OF_SERVICE___
+﻿___TERMS_OF_SERVICE___
 
 By creating or modifying this file you agree to Google Tag Manager's Community
 Template Gallery Developer Terms of Service available at
@@ -13,14 +13,16 @@ ___INFO___
   "id": "cvt_temp_public_id",
   "version": 1,
   "securityGroups": [],
-  "categories": ["UTILITY", "TAG_MANAGEMENT"],
+  "categories": [
+    "UTILITY",
+    "TAG_MANAGEMENT"
+  ],
   "displayName": "String from array of objects",
-  "__wm": "VGVtcGxhdGUtQXV0aG9yX1N0cmluZy1mcm9tLWFycmF5LW9mLW9iamVjdHMtU2ltby1BaGF2YQ==",
+  "__wm": "VGVtcGxhdGUtQXV0aG9yX1N0cmluZy1mcm9tLWFycmF5LW9mLW9iamVjdHMtU2ltby1BaGF2YQ\u003d\u003d",
   "description": "Create a concatenated string of a key in an array of objects.",
   "containerContexts": [
     "WEB"
-  ],
-  "brand": {}
+  ]
 }
 
 
@@ -30,7 +32,7 @@ ___TEMPLATE_PARAMETERS___
   {
     "type": "LABEL",
     "name": "helpText",
-    "displayName": "Use this variable to turn an array of objects (e.g. <strong>[{id: '123', name: 'first'},{id: '234', name: 'second}]</strong>) into a string (e.g. <strong>'123,234'</strong>)."
+    "displayName": "Use this variable to turn an array of objects (e.g. \u003cstrong\u003e[{id: \u0027123\u0027, name: \u0027first\u0027},{id: \u0027234\u0027, name: \u0027second}]\u003c/strong\u003e) into a string (e.g. \u003cstrong\u003e\u0027123,234\u0027\u003c/strong\u003e)."
   },
   {
     "type": "SELECT",
@@ -64,6 +66,28 @@ ___TEMPLATE_PARAMETERS___
     "alwaysInSummary": true
   }
 ]
+
+
+___SANDBOXED_JS_FOR_WEB_TEMPLATE___
+
+/* GTMTEMPLATESCOM_CHECKSUM:[5137355874762752,1560849757732,942c276e7337c95ce19c733c46ed8899] */
+
+const callInWindow = require('callInWindow');
+const getType = require('getType');
+
+const inputArray = data.inputArray;
+const keyToConcatenate = data.keyToConcatenate;
+const delimiter = data.delimiter;
+
+// If not an array, return undefined
+if (getType(inputArray) !== 'array') {
+  return;
+}
+
+return inputArray
+  .map(obj => obj[keyToConcatenate])
+  .filter(obj => obj)
+  .join(delimiter);
 
 
 ___WEB_PERMISSIONS___
@@ -129,53 +153,75 @@ ___WEB_PERMISSIONS___
       "isEditedByUser": true
     },
     "isRequired": true
-  },
-  {
-    "instance": {
-      "key": {
-        "publicId": "logging",
-        "versionId": "1"
-      },
-      "param": [
-        {
-          "key": "environments",
-          "value": {
-            "type": 1,
-            "string": "debug"
-          }
-        }
-      ]
-    },
-    "isRequired": true
   }
 ]
 
 
-___SANDBOXED_JS_FOR_WEB_TEMPLATE___
+___TESTS___
 
-/* GTMTEMPLATESCOM_CHECKSUM:[5137355874762752,1560849757732,942c276e7337c95ce19c733c46ed8899] */
+scenarios:
+- name: Return undefined if not array
+  code: |-
+    // Call runCode to run the template's code.
+    const mockData = {
+      inputArray: 'notAnArray',
+      keyToConcatenate: 'name',
+      delimiter: ','
+    };
 
-const callInWindow = require('callInWindow');
-const log = require('logToConsole');
+    const variableResult = runCode(mockData);
 
-// Helper method
-const isArray = arr => callInWindow('toString.call', arr) === '[object Array]';
+    // Verify that the variable returns a result.
+    assertThat(variableResult).isEqualTo(undefined);
+- name: Return empty string if no objects in array
+  code: |-
+    // Call runCode to run the template's code.
+    const mockData = {
+      inputArray: [1, 2, 3],
+      keyToConcatenate: 'name',
+      delimiter: ','
+    };
 
-const inputArray = data.inputArray;
-const keyToConcatenate = data.keyToConcatenate;
-const delimiter = data.delimiter;
+    const expected = '';
 
-// If not an array, return undefined
-if (!isArray(inputArray)) {
-  return;
-}
+    const variableResult = runCode(mockData);
 
-return inputArray
-  .map(obj => obj[keyToConcatenate])
-  .filter(obj => obj)
-  .join(delimiter);
+    // Verify that the variable returns a result.
+    assertThat(variableResult).isEqualTo(expected);
+- name: Return empty string if objects in array do not have the key
+  code: |-
+    // Call runCode to run the template's code.
+    const mockData = {
+      inputArray: [{id: '123'},{category: 'shoes'}],
+      keyToConcatenate: 'name',
+      delimiter: ','
+    };
+
+    const expected = '';
+
+    const variableResult = runCode(mockData);
+
+    // Verify that the variable returns a result.
+    assertThat(variableResult).isEqualTo(expected);
+- name: Return concatenated string with delimiter for valid object keys
+  code: |-
+    // Call runCode to run the template's code.
+    const mockData = {
+      inputArray: [{name: 'firstName'},{name: 'secondName'}],
+      keyToConcatenate: 'name',
+      delimiter: ','
+    };
+
+    const expected = 'firstName,secondName';
+
+    const variableResult = runCode(mockData);
+
+    // Verify that the variable returns a result.
+    assertThat(variableResult).isEqualTo(expected);
 
 
 ___NOTES___
 
 Created on 22/05/2019, 10:54:06
+
+
