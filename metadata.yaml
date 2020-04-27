@@ -1,4 +1,5 @@
 homepage: "https://www.simoahava.com/"
+documentation: "https://www.simoahava.com/custom-templates/string-from-array-of-objects/"
 versions:
   # Latest version
   - sha: ac65e69fb5ee3dea2971e3a399b2ebe2564f2e64
